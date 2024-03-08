@@ -1,4 +1,8 @@
 <!doctype html>
+<nav>
+  <a href="/" class="home">Home</a>
+</nav>
+
 <h1>Database Preview</h1>
 
 <p>Database Stats:</p>
@@ -49,3 +53,42 @@
   </tr>
   {% endfor %}
 </table>
+
+<form>
+  <label for="dropdown">Select a Link Value for Deletion:</label>
+  <select id="dropdown" name="dropdown">
+    {% for value in links_sorted %}
+    <option value="{{ value }}">{{ value }}</option>
+    {% endfor %}
+  </select>
+</form>
+
+<p id="row_count">Number of Rows Selected for Deletion: </p>
+<form action="/delete_rows" , method="post">
+  <p>Delete Rows?</p>
+  <input type="hidden" name="link_value" id="link_value" value="">
+  <input type="hidden" name="row_value" id="row_value" value="">
+  <input type="submit" value="Submit">
+</form>
+
+<script>
+  let inputs = document.getElementById('dropdown');
+  let links = {{ links }};
+
+  inputs.addEventListener('input', function () {
+    let count = 0;
+    for (var i = 0; i < links.length; i++) {
+      if (links[i] == inputs.value) {
+        count++;
+      }
+    }
+    var ptag = document.getElementById('row_count');
+    var input_value = document.getElementById('link_value');
+    var row_value = document.getElementById('row_value');
+
+    ptag.innerHTML = 'Number of Rows Selected for Deletion: ' + count;
+    input_value.value = inputs.value;
+    row_value.value = count;
+  });
+
+</script>

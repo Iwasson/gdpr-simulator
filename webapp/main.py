@@ -2,7 +2,7 @@ import time
 
 from flask import Flask, render_template, request
 from .functions.database_seeder import seed_db
-from .functions.sqlite_wrapper import get_first_n_rows
+from .functions.sqlite_wrapper import get_first_n_rows, remove_links
 
 app = Flask(__name__)
 
@@ -19,31 +19,38 @@ def generate_schema():
     num_rows = int(request.form["num_rows"])
     linking_strength = int(request.form["linking_strength"])
     link_deviation = int(50 - linking_strength / 100 * 50)
-    schema = seed_db(num_rows, num_columns, link_deviation)
+    schema, links = seed_db(num_rows, num_columns, link_deviation)
+    links_sorted = sorted(set(links))
     top_rows = get_first_n_rows(10)
     end_time = time.time()
 
     time_diff_count = end_time - start_time
     time_diff = f"{time_diff_count:.2f} Seconds"
 
-    # print(get_first_n_rows(10))
-    return render_template(
-        "display.html",
-        num_columns=num_columns,
-        num_rows=num_rows,
-        link_deviation=link_deviation,
-        schema=schema,
-        top_rows=top_rows,
-        time_diff=time_diff,
+    return (
+        render_template(
+            "display.html",
+            num_columns=num_columns,
+            num_rows=num_rows,
+            link_deviation=link_deviation,
+            schema=schema,
+            top_rows=top_rows,
+            time_diff=time_diff,
+            links=links,
+            links_sorted=links_sorted,
+        ),
+        200,
     )
 
 
-@app.route("/populate")
-def populate_db():
-    seed_db(100, 10, 5)
-    return "test"
-
-
-@app.route("/delete")
+@app.route("/delete_rows", methods=["POST"])
 def delete_data():
-    return
+    start_time = time.time()
+    link = int(request.form["link_value"])
+    row_count = int(request.form["row_value"])
+    remove_links(link)
+    end_time = time.time()
+
+    time_diff_count = end_time - start_time
+    time_diff = f"{time_diff_count:.2f} Seconds"
+    return render_template("delete.html", link=link, time_diff=time_diff, row_count=row_count), 200

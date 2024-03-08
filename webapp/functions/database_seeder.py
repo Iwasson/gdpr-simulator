@@ -61,4 +61,4 @@ def seed_db(num_rows: int, num_cols: int, linking_strength: int) -> dict:
         insert_data(values)
     
     display_histogram(links)
-    return schema
+    return schema, links
