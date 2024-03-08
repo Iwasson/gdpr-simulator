@@ -17,7 +17,8 @@ def generate_scheme():
 
 @app.route("/populate")
 def populate_db():
-    return
+    seed_db(100, 10, 5)
+    return "test"
 
 @app.route("/delete")
 def delete_data():

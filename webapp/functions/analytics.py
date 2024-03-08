@@ -6,4 +6,4 @@ def display_histogram(data):
     plt.ylabel('Frequency')
     plt.title('Histogram of Integers')
     plt.grid(axis='y', alpha=0.75)
-    plt.savefig("plot.png")
+    plt.show()
