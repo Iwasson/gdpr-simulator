@@ -31,7 +31,6 @@ def generate_rand_data(datatype):
     return data
 
 def seed_db(num_rows: int, num_cols: int, linking_strength: int) -> dict:
-    table_name = "new_table"
     # get the random columns and their types
     schema = generate_schema(num_cols)
 
@@ -39,10 +38,10 @@ def seed_db(num_rows: int, num_cols: int, linking_strength: int) -> dict:
     links = generate_numbers("normal", size=num_rows, std=linking_strength)
 
     # delete any existing tables if they exist
-    delete_table_if_exists(table_name)
+    delete_table_if_exists()
 
     # for each key in the schema, insert column into DB
-    create_table(schema, table_name=table_name)
+    create_table(schema)
 
     # log the schema to make sure its working
     #print(get_table_schema(table_name))
@@ -58,8 +57,5 @@ def seed_db(num_rows: int, num_cols: int, linking_strength: int) -> dict:
             else:
                 values = values + (generate_rand_data(schema[key]),)
         
-        insert_data(table_name, values)
-    
-    # print(schema)
-    # print(get_first_n_rows(table_name, 1))
+        insert_data(values)
     return schema
