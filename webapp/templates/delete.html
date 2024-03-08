@@ -7,3 +7,19 @@
 <p>Link Value Deleted: {{ link }}</p>
 <p>Rows Deleted: {{ row_count }}</p>
 <p>Time to Delete: {{ time_diff }}</p>
+
+<p>Data that was deleted:</p>
+<table>
+  <tr>
+    {% for col in schema %}
+    <th>{{ col[1] }}</th>
+    {% endfor %}
+  </tr>
+  {% for row in rows %}
+  <tr>
+    {% for val in row %}
+    <td>{{ val }}</td>
+    {% endfor %}
+  </tr>
+  {% endfor %}
+</table>

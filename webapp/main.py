@@ -2,7 +2,7 @@ import time
 
 from flask import Flask, render_template, request
 from .functions.database_seeder import seed_db
-from .functions.sqlite_wrapper import get_first_n_rows, remove_links
+from .functions.sqlite_wrapper import get_first_n_rows, remove_links, get_link_data, get_table_schema
 
 app = Flask(__name__)
 
@@ -48,9 +48,21 @@ def delete_data():
     start_time = time.time()
     link = int(request.form["link_value"])
     row_count = int(request.form["row_value"])
+    rows = get_link_data(link)
+    schema = get_table_schema()
     remove_links(link)
     end_time = time.time()
 
     time_diff_count = end_time - start_time
     time_diff = f"{time_diff_count:.2f} Seconds"
-    return render_template("delete.html", link=link, time_diff=time_diff, row_count=row_count), 200
+    return (
+        render_template(
+            "delete.html",
+            link=link,
+            time_diff=time_diff,
+            row_count=row_count,
+            rows=rows,
+            schema=schema,
+        ),
+        200,
+    )

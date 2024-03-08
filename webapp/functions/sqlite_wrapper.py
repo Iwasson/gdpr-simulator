@@ -88,3 +88,17 @@ def remove_links(link):
     c.execute(f"DELETE FROM {TABLE_NAME} WHERE Link={link}")
     conn.commit()
     conn.close()
+
+def get_link_data(link):
+    """
+    Gets all of the link data
+    """
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute(f"SELECT * FROM {TABLE_NAME} WHERE Link={link}")
+    conn.commit()
+
+    rows = c.fetchall()
+    conn.close()
+
+    return rows
