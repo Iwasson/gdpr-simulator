@@ -1,0 +1,51 @@
+<!doctype html>
+<h1>Database Preview</h1>
+
+<p>Database Stats:</p>
+<table>
+  <tr>
+    <th>Number of Columns:</th>
+    <th>Number of Rows:</th>
+    <th>Standard Deviation between Links:</th>
+    <th>Time to generate:</th>
+  </tr>
+  <tr>
+    <td>{{ num_columns }}</td>
+    <td>{{ num_rows }}</td>
+    <td>{{ link_deviation }}</td>
+    <td>{{ time_diff }}</td>
+  </tr>
+</table>
+
+<p>Database Link Distribution</p>
+<img src="/static/link_dist.png">
+
+<p>Database Schema:</p>
+<table>
+  <tr>
+    <th>Column Name</th>
+    <th>Datatype</th>
+  </tr>
+  {% for col in schema.keys() %}
+  <tr>
+    <td>{{ col }}</td>
+    <td>{{ schema[col] }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<p>Top 10 Rows of Database:</p>
+<table>
+  <tr>
+    {% for col in schema.keys() %}
+    <th>{{ col }}</th>
+    {% endfor %}
+  </tr>
+  {% for row in top_rows %}
+  <tr>
+    {% for val in row %}
+    <td>{{ val }}</td>
+    {% endfor %}
+  </tr>
+  {% endfor %}
+</table>

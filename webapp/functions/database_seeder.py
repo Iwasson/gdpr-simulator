@@ -1,8 +1,9 @@
 import random
 import numpy as np
 
+from .analytics import display_histogram
 from .schema_generator import generate_rand_string, generate_rand_num, generate_schema, generate_rand_float
-from .sqlite_wrapper import create_table, get_table_schema, delete_table_if_exists, insert_data, get_first_n_rows
+from .sqlite_wrapper import create_table, delete_table_if_exists, insert_data
 
 
 def generate_numbers(distribution, size=1, std=10):
@@ -58,4 +59,6 @@ def seed_db(num_rows: int, num_cols: int, linking_strength: int) -> dict:
                 values = values + (generate_rand_data(schema[key]),)
         
         insert_data(values)
+    
+    display_histogram(links)
     return schema
