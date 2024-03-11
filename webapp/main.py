@@ -1,8 +1,16 @@
 import time
+import statistics
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from .functions.database_seeder import seed_db
-from .functions.sqlite_wrapper import get_first_n_rows, remove_links, get_link_data, get_table_schema
+from .functions.sqlite_wrapper import (
+    get_first_n_rows,
+    remove_links,
+    get_link_data,
+    get_table_schema,
+    explain_delete_command,
+    delete_transactions,
+)
 
 app = Flask(__name__)
 
@@ -65,4 +73,44 @@ def delete_data():
             schema=schema,
         ),
         200,
+    )
+
+
+@app.route("/explain_delete_rows", methods=["GET"])
+def explain_delete():
+    link = request.args.get('link_value_2')
+    explain = explain_delete_command(link)
+
+    return jsonify({"message" : explain})
+
+
+@app.route('/delete_transactions', methods=['POST'])
+def transaction():
+    start_time = time.time()
+    link = int(request.form["link_value_3"])
+    num = int(request.form["delete_count"])
+    times = delete_transactions(link, num)
+    end_time = time.time()
+    time_diff_count = end_time - start_time
+    time_diff = f"{time_diff_count:.2f} Seconds"
+
+    total_time = sum(times)
+    average_time = total_time / len(times)
+    max_time = max(times)
+    min_time = min(times)
+    deviation = "N/A"
+    if len(times) > 2:
+        deviation = statistics.stdev(times)
+
+    return (
+        render_template(
+            "delete_multiple.html",
+            link=link,
+            num=num,
+            average_time=average_time,
+            time_diff=time_diff,
+            deviation=deviation,
+            max_time=max_time,
+            min_time=min_time,
+        )
     )

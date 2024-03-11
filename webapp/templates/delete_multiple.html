@@ -1,0 +1,27 @@
+<!doctype html>
+<nav>
+  <a href="/" class="home">Home</a>
+</nav>
+
+<h1>Delete Multiple Stats</h1>
+
+<table>
+  <tr>
+    <th>Link number selected:</th>
+    <th>Number of deletions scheduled:</th>
+    <th>Time to complete:</th>
+    <th>Max time to delete:</th>
+    <th>Min time to delete:</th>
+    <th>Average time to delete</th>
+    <th>Standard Deviation between deletion times:</th>
+  </tr>
+  <tr>
+    <td>{{ link }}</td>
+    <td>{{ num }}</td>
+    <td>{{ time_diff }}</td>
+    <td>{{ max_time }}</td>
+    <td>{{ min_time }}</td>
+    <td>{{ average_time }}</td>
+    <td>{{ deviation }}</td>
+  </tr>
+</table>

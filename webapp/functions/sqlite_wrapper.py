@@ -1,4 +1,5 @@
 import sqlite3
+import time
 
 DB_FILE = 'table.db'
 TABLE_NAME = 'new_table'
@@ -102,3 +103,48 @@ def get_link_data(link):
     conn.close()
 
     return rows
+
+def explain_delete_command(link):
+    """
+    Runs the SQL Explain command
+    """
+    explain = []
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        cursor = conn.cursor()
+        cursor.execute(f'EXPLAIN DELETE FROM {TABLE_NAME} WHERE Link={link}')
+        
+        explanation = cursor.fetchall()
+        for row in explanation:
+            explain.append(row)
+        
+        cursor.close()
+        conn.close()
+
+    except sqlite3.Error as e:
+        print("SQLite error:", e)
+    
+    return explain
+
+def delete_transactions(link, num):
+    """
+    Runs a delete transaction num times
+    """
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+
+    conn.execute('BEGIN TRANSACTION')
+
+    times = []
+    for _ in range(0, num):
+        start_time = time.time()
+        cursor.execute(f"DELETE FROM {TABLE_NAME} WHERE Link={link}")
+        conn.rollback()
+        end_time = time.time()
+        times.append(end_time - start_time)
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return times

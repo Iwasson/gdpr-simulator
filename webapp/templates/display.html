@@ -64,10 +64,42 @@
 </form>
 
 <p id="row_count">Number of Rows Selected for Deletion: </p>
+
+<p>Explain Row Deletion?</p>
+<div>
+  <input type="hidden" name="link_value_2" id="link_value_2" value="">
+  <button onclick="get_explain()">Call API</button>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>addr</th>
+      <th>opcode</th>
+      <th>p1</th>
+      <th>p2</th>
+      <th>p3</th>
+      <th>p4</th>
+      <th>p5</th>
+      <th>comment</th>
+    </tr>
+  </thead>
+  <tbody id="apiTableBody">
+  </tbody>
+</table>
+
+<p>Delete Rows?</p>
 <form action="/delete_rows" , method="post">
-  <p>Delete Rows?</p>
   <input type="hidden" name="link_value" id="link_value" value="">
   <input type="hidden" name="row_value" id="row_value" value="">
+  <input type="submit" value="Submit">
+</form>
+
+<p>Schedule batch deletions?</p>
+<form action="/delete_transactions", method="post">
+  <input type="hidden" name="link_value_3" id="link_value_3" value="">
+  <label for="delete_count">How many deletions:</label>
+  <input id="delete_count" name="delete_count" type="number">
   <input type="submit" value="Submit">
 </form>
 
@@ -84,11 +116,43 @@
     }
     var ptag = document.getElementById('row_count');
     var input_value = document.getElementById('link_value');
+    var input_value_2 = document.getElementById('link_value_2');
+    var input_value_2 = document.getElementById('link_value_3');
     var row_value = document.getElementById('row_value');
 
     ptag.innerHTML = 'Number of Rows Selected for Deletion: ' + count;
     input_value.value = inputs.value;
+    input_value_2.value = inputs.value;
+    input_value_3.value = inputs.value;
     row_value.value = count;
   });
 
+  function get_explain() {
+    var input_value_2 = document.getElementById('link_value_2').value;
+    fetch('/explain_delete_rows?link_value_2=' + input_value_2)
+      .then(response => response.json())
+      .then(data => {
+        const tableBody = document.getElementById('apiTableBody');
+        tableBody.innerHTML = '';
+
+        data.message.forEach(item => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${item[0]}</td>
+            <td>${item[1]}</td>
+            <td>${item[2]}</td>
+            <td>${item[3]}</td>
+            <td>${item[4]}</td>
+            <td>${item[5]}</td>
+            <td>${item[6]}</td>
+            <td>${item[7]}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('explainResult').innerText = 'Error occurred while fetching data';
+      });
+  }
 </script>
