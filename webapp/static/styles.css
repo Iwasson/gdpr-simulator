@@ -1,0 +1,76 @@
+body {
+  text-align: center;
+  background-color: #E8DCB9;
+  color: #0D1B1E;
+  font-size: larger;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+h1 {
+  text-align: center;
+  color: #0D1B1E;
+}
+
+form {
+  background-color: #C3DBC5;
+  width: 50vw;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 3em;
+  padding-top: 15pt;
+  padding-bottom: 25pt;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+}
+
+input {
+  margin-bottom: 3em;
+}
+
+.sub_button {
+  border-radius: 20px;
+  padding: 15px 30px;
+  font-size: 25px;
+  background-color: #7798AB;
+  color: #fff;
+  transition: background-color 0.3s ease;
+  margin-bottom: 2em;
+}
+
+.sub_button:hover {
+  background-color: #0D1B1E;
+  cursor: pointer;
+}
+
+table {
+  border-collapse: collapse;
+  width: 50vw;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 3em;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+table td, table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+table th {
+  background-color: #23535e;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+}
+
+table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table tr:nth-child(odd) {
+  background-color: #98afbd;
+}
+
+table tr:hover {
+  background-color: #f2f2f2;
+}

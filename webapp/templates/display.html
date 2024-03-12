@@ -1,107 +1,122 @@
 <!doctype html>
-<nav>
-  <a href="/" class="home">Home</a>
-</nav>
+<html lang="en">
 
-<h1>Database Preview</h1>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GDPR Deletion Simulator</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
 
-<p>Database Stats:</p>
-<table>
-  <tr>
-    <th>Number of Columns:</th>
-    <th>Number of Rows:</th>
-    <th>Standard Deviation between Links:</th>
-    <th>Time to generate:</th>
-  </tr>
-  <tr>
-    <td>{{ num_columns }}</td>
-    <td>{{ num_rows }}</td>
-    <td>{{ link_deviation }}</td>
-    <td>{{ time_diff }}</td>
-  </tr>
-</table>
+<body>
+  <nav>
+    <a href="/" class="home">Home</a>
+  </nav>
 
-<p>Database Link Distribution</p>
-<img src="/static/link_dist.png">
+  <h1>Database Preview</h1>
 
-<p>Database Schema:</p>
-<table>
-  <tr>
-    <th>Column Name</th>
-    <th>Datatype</th>
-  </tr>
-  {% for col in schema.keys() %}
-  <tr>
-    <td>{{ col }}</td>
-    <td>{{ schema[col] }}</td>
-  </tr>
-  {% endfor %}
-</table>
-
-<p>Top 10 Rows of Database:</p>
-<table>
-  <tr>
-    {% for col in schema.keys() %}
-    <th>{{ col }}</th>
-    {% endfor %}
-  </tr>
-  {% for row in top_rows %}
-  <tr>
-    {% for val in row %}
-    <td>{{ val }}</td>
-    {% endfor %}
-  </tr>
-  {% endfor %}
-</table>
-
-<form>
-  <label for="dropdown">Select a Link Value for Deletion:</label>
-  <select id="dropdown" name="dropdown">
-    {% for value in links_sorted %}
-    <option value="{{ value }}">{{ value }}</option>
-    {% endfor %}
-  </select>
-</form>
-
-<p id="row_count">Number of Rows Selected for Deletion: </p>
-
-<p>Explain Row Deletion?</p>
-<div>
-  <input type="hidden" name="link_value_2" id="link_value_2" value="">
-  <button onclick="get_explain()">Call API</button>
-</div>
-
-<table>
-  <thead>
+  <h2>Database Stats:</h2>
+  <table>
     <tr>
-      <th>addr</th>
-      <th>opcode</th>
-      <th>p1</th>
-      <th>p2</th>
-      <th>p3</th>
-      <th>p4</th>
-      <th>p5</th>
-      <th>comment</th>
+      <th>Number of Columns:</th>
+      <th>Number of Rows:</th>
+      <th>Standard Deviation between Links:</th>
+      <th>Time to generate:</th>
     </tr>
-  </thead>
-  <tbody id="apiTableBody">
-  </tbody>
-</table>
+    <tr>
+      <td>{{ num_columns }}</td>
+      <td>{{ num_rows }}</td>
+      <td>{{ link_deviation }}</td>
+      <td>{{ time_diff }}</td>
+    </tr>
+  </table>
 
-<p>Delete Rows?</p>
-<form action="/delete_rows" , method="post">
-  <input type="hidden" name="link_value" id="link_value" value="">
-  <input type="hidden" name="row_value" id="row_value" value="">
-  <input type="submit" value="Submit">
-</form>
+  <h2>Database Link Distribution</h2>
+  <img src="/static/link_dist.png">
 
-<p>Schedule batch deletions?</p>
-<form action="/delete_transactions", method="post">
-  <input type="hidden" name="link_value_3" id="link_value_3" value="">
-  <label for="delete_count">How many deletions:</label>
-  <input id="delete_count" name="delete_count" type="number">
-  <input type="submit" value="Submit">
-</form>
+  <h2>Database Schema:</h2>
+  <table>
+    <tr>
+      <th>Column Name</th>
+      <th>Datatype</th>
+    </tr>
+    {% for col in schema.keys() %}
+    <tr>
+      <td>{{ col }}</td>
+      <td>{{ schema[col] }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <h2>Top 10 Rows of Database:</h2>
+  <table>
+    <tr>
+      {% for col in schema.keys() %}
+      <th>{{ col }}</th>
+      {% endfor %}
+    </tr>
+    {% for row in top_rows %}
+    <tr>
+      {% for val in row %}
+      <td>{{ val }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>
+
+  <form>
+    <label for="dropdown">Select a Link Value for Deletion:</label>
+    <select id="dropdown" name="dropdown">
+      {% for value in links_sorted %}
+      <option value="{{ value }}">{{ value }}</option>
+      {% endfor %}
+    </select>
+    <p id="row_count">Number of Rows Selected for Deletion: </p>
+  </form>
+
+  
+
+  <div>
+    <h2>Explain Row Deletion?</h2>
+    <input type="hidden" name="link_value_2" id="link_value_2" value="">
+    <button onclick="get_explain()" class="sub_button">Explain!</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>addr</th>
+        <th>opcode</th>
+        <th>p1</th>
+        <th>p2</th>
+        <th>p3</th>
+        <th>p4</th>
+        <th>p5</th>
+        <th>comment</th>
+      </tr>
+    </thead>
+    <tbody id="apiTableBody">
+    </tbody>
+  </table>
+
+  <form action="/delete_rows" , method="post">
+    <h2>Delete Rows?</h2>
+    <input type="hidden" name="link_value" id="link_value" value="">
+    <input type="hidden" name="row_value" id="row_value" value="">
+    <input type="submit" value="Submit" class="sub_button">
+  </form>
+  
+  <form action="/delete_transactions" , method="post">
+    <h2>Schedule batch deletions?</h2>
+    <input type="hidden" name="link_value_3" id="link_value_3" value="">
+
+    <label for="delete_count">How many deletions:</label>
+    <input id="delete_count" name="delete_count" type="number" value="">
+    <br>
+    
+    <input type="submit" value="Submit" class="sub_button">
+  </form>
+</body>
 
 <script>
   let inputs = document.getElementById('dropdown');
@@ -117,7 +132,7 @@
     var ptag = document.getElementById('row_count');
     var input_value = document.getElementById('link_value');
     var input_value_2 = document.getElementById('link_value_2');
-    var input_value_2 = document.getElementById('link_value_3');
+    var input_value_3 = document.getElementById('link_value_3');
     var row_value = document.getElementById('row_value');
 
     ptag.innerHTML = 'Number of Rows Selected for Deletion: ' + count;
@@ -156,3 +171,6 @@
       });
   }
 </script>
+
+
+</html>

@@ -1,25 +1,38 @@
 <!doctype html>
-<nav>
-  <a href="/" class="home">Home</a>
-</nav>
-<h1>Data Deletion Results</h1>
+<html lang="en">
 
-<p>Link Value Deleted: {{ link }}</p>
-<p>Rows Deleted: {{ row_count }}</p>
-<p>Time to Delete: {{ time_diff }}</p>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GDPR Deletion Simulator</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
 
-<p>Data that was deleted:</p>
-<table>
-  <tr>
-    {% for col in schema %}
-    <th>{{ col[1] }}</th>
+<body>
+  <nav>
+    <a href="/" class="home">Home</a>
+  </nav>
+  <h1>Data Deletion Results</h1>
+
+  <p>Link Value Deleted: {{ link }}</p>
+  <p>Rows Deleted: {{ row_count }}</p>
+  <p>Time to Delete: {{ time_diff }}</p>
+
+  <p>Data that was deleted:</p>
+  <table>
+    <tr>
+      {% for col in schema %}
+      <th>{{ col[1] }}</th>
+      {% endfor %}
+    </tr>
+    {% for row in rows %}
+    <tr>
+      {% for val in row %}
+      <td>{{ val }}</td>
+      {% endfor %}
+    </tr>
     {% endfor %}
-  </tr>
-  {% for row in rows %}
-  <tr>
-    {% for val in row %}
-    <td>{{ val }}</td>
-    {% endfor %}
-  </tr>
-  {% endfor %}
-</table>
+  </table>
+</body>
+
+</html>
