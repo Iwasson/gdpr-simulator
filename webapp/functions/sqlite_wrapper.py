@@ -50,6 +50,30 @@ def get_table_schema():
 
     return schema
 
+def get_index_info():
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+
+    query = f"PRAGMA index_list({TABLE_NAME})"
+    cursor.execute(query)
+    index_list = cursor.fetchall()
+
+    info_string = []
+
+    info_string.append(f"Index information for table '{TABLE_NAME}':")
+    for index in index_list:
+        index_name = index[1]
+        unique = "Unique" if index[2] == 1 else "Non-unique"
+        columns_query = f"PRAGMA index_info({index_name})"
+        cursor.execute(columns_query)
+        columns = cursor.fetchall()
+        column_names = ", ".join(col[2] for col in columns)
+        info_string.append(f"Index Name: {index_name}, Unique: {unique}, Columns: {column_names}")
+
+    conn.close()
+    return info_string
+
+
 def insert_data(values):
     """
     Insert data into a table with multiple columns in an SQLite database.
@@ -148,3 +172,17 @@ def delete_transactions(link, num):
     conn.close()
 
     return times
+
+def index_db(column="Link"):
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+
+    index_name = f"idx_{TABLE_NAME}_{column}"
+    query = f"CREATE INDEX IF NOT EXISTS {index_name} ON {TABLE_NAME} ({column})"
+    cursor.execute(query)
+
+    conn.commit()
+    conn.close()
+
+def sequential_deletes(link):
+    ...

@@ -10,6 +10,8 @@ from .functions.sqlite_wrapper import (
     get_table_schema,
     explain_delete_command,
     delete_transactions,
+    index_db,
+    get_index_info,
 )
 
 app = Flask(__name__)
@@ -27,13 +29,22 @@ def generate_schema():
     num_rows = int(request.form["num_rows"])
     linking_strength = int(request.form["linking_strength"])
     link_deviation = int(50 - linking_strength / 100 * 50)
+    if "indexing" in request.form:
+        index_db()
     schema, links = seed_db(num_rows, num_columns, link_deviation)
     links_sorted = sorted(set(links))
+        
+
     top_rows = get_first_n_rows(10)
     end_time = time.time()
 
     time_diff_count = end_time - start_time
     time_diff = f"{time_diff_count:.2f} Seconds"
+
+    index_info = get_index_info()
+
+    if len(index_info) < 2:
+        index_info = ["No index in table!"]
 
     return (
         render_template(
@@ -46,6 +57,7 @@ def generate_schema():
             time_diff=time_diff,
             links=links,
             links_sorted=links_sorted,
+            index_info=index_info,
         ),
         200,
     )

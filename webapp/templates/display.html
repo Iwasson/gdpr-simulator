@@ -48,6 +48,11 @@
     {% endfor %}
   </table>
 
+  <h2>Database Index info:</h2>
+  {% for info in index_info %}
+  <p>{{ info }}</p>
+  {% endfor %}
+
   <h2>Top 10 Rows of Database:</h2>
   <table>
     <tr>
